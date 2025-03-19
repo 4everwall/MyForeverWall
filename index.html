@@ -73,10 +73,32 @@
         .social-buttons {
             margin-top: 20px;
         }
+        .dark-mode {
+            background: #121212;
+            color: #fff;
+        }
+        .message-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            max-width: 300px;
+        }
+        .message-popup.dark {
+            background: #333;
+            color: white;
+        }
     </style>
 </head>
 <body>
     <header>MyForeverWall - Leave Your Mark, For Eternity</header>
+    <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
     <div class="container">
         <h2>Reserve Your Spot on the Wall</h2>
         <p>Be one of the first to leave your mark. Limited spots available!</p>
@@ -85,6 +107,7 @@
         
         <div class="submission-form">
             <input type="text" id="userMessage" placeholder="Enter your message" required>
+            <input type="file" id="userImage" accept="image/*">
             <button onclick="addMessage()">Submit Message</button>
             <button onclick="addPremiumMessage()">Reserve Premium Spot</button>
         </div>
@@ -93,29 +116,49 @@
             <button onclick="share()">Share Your Spot</button>
         </div>
     </div>
+    <div id="messagePopup" class="message-popup">
+        <p id="popupText"></p>
+        <button onclick="closePopup()">Close</button>
+    </div>
 
     <script>
         const messages = [];
         const messageGrid = document.getElementById("messageGrid");
+        let darkMode = false;
 
-        function addMessage() {
+        function addMessage(premium = false) {
             const userMessage = document.getElementById("userMessage").value;
-            if (userMessage.trim()) {
+            const userImage = document.getElementById("userImage").files[0];
+            
+            if (userMessage.trim() || userImage) {
                 const div = document.createElement("div");
                 div.classList.add("grid-item");
-                div.innerText = userMessage;
+                if (premium) div.classList.add("premium");
+                
+                if (userMessage.trim()) {
+                    const text = document.createElement("p");
+                    text.innerText = userMessage;
+                    div.appendChild(text);
+                }
+                
+                if (userImage) {
+                    const img = document.createElement("img");
+                    img.src = URL.createObjectURL(userImage);
+                    img.style.maxWidth = "100%";
+                    img.style.borderRadius = "5px";
+                    div.appendChild(img);
+                }
+                
+                div.onclick = function () {
+                    openPopup(userMessage);
+                };
+                
                 messageGrid.appendChild(div);
             }
         }
 
         function addPremiumMessage() {
-            const userMessage = document.getElementById("userMessage").value;
-            if (userMessage.trim()) {
-                const div = document.createElement("div");
-                div.classList.add("grid-item", "premium");
-                div.innerText = userMessage;
-                messageGrid.appendChild(div);
-            }
+            addMessage(true);
         }
 
         function share() {
@@ -125,6 +168,21 @@
                 url: window.location.href
             };
             navigator.share(shareData).catch(err => console.log('Share failed', err));
+        }
+
+        function toggleDarkMode() {
+            darkMode = !darkMode;
+            document.body.classList.toggle("dark-mode");
+            document.getElementById("messagePopup").classList.toggle("dark");
+        }
+
+        function openPopup(message) {
+            document.getElementById("popupText").innerText = message;
+            document.getElementById("messagePopup").style.display = "block";
+        }
+
+        function closePopup() {
+            document.getElementById("messagePopup").style.display = "none";
         }
     </script>
 </body>
