@@ -100,11 +100,16 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: white;
+            background: #fff;
+            color: #000;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
             z-index: 1000;
+        }
+        .dark-mode .message-modal {
+            background: #333;
+            color: #fff;
         }
         .message-modal button {
             margin-top: 10px;
@@ -167,18 +172,6 @@
             document.getElementById("overlay").style.display = "none";
         }
 
-        function updateCountdown() {
-            const launchDate = new Date("2025-04-15T00:00:00").getTime();
-            const now = new Date().getTime();
-            const timeLeft = launchDate - now;
-            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-            document.getElementById("countdown").innerHTML = `Launching in: ${days}d ${hours}h ${minutes}m ${seconds}s`;
-        }
-        setInterval(updateCountdown, 1000);
-        
         function toggleDarkMode() {
             document.body.classList.toggle("dark-mode");
         }
