@@ -35,8 +35,8 @@
             padding: 20px;
         }
         .grid-item {
-            background: linear-gradient(45deg, #d4af37, #c89b30, #b8860b);
-            color: white;
+            background: #f0f0f0;
+            color: black;
             padding: 20px;
             border-radius: 10px;
             font-size: 14px;
@@ -45,7 +45,7 @@
             word-wrap: break-word;
             max-height: 150px;
             overflow: hidden;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            text-shadow: none;
         }
         .premium {
             background: linear-gradient(45deg, #ffd700, #ffcc00, #ffb700) !important;
@@ -63,7 +63,8 @@
             color: white;
         }
         .dark-mode .grid-item {
-            background: linear-gradient(45deg, #b8860b, #8b7500, #705e00);
+            background: #333;
+            color: white;
         }
         .dark-mode .premium {
             background: linear-gradient(45deg, #ffcc00, #ffb700, #e6a700) !important;
@@ -87,6 +88,28 @@
             background: #222;
             color: white;
         }
+        button {
+            background: black;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        button:hover {
+            background: #333;
+            transform: scale(1.05);
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        .premium-button {
+            background: linear-gradient(45deg, #ffd700, #ffcc00, #ffb700) !important;
+            font-weight: bold;
+            border: 2px solid #b8860b;
+            box-shadow: 0px 4px 10px rgba(255, 215, 0, 0.6);
+        }
     </style>
 </head>
 <body>
@@ -102,7 +125,7 @@
             <input type="text" id="userMessage" placeholder="Enter your message (max 200 chars)" maxlength="200" required>
             <input type="file" id="userImage" accept="image/*">
             <button onclick="addMessage(false)">Submit Message</button>
-            <button onclick="addMessage(true)">Reserve Premium Spot</button>
+            <button class="premium-button" onclick="addMessage(true)">Reserve Premium Spot</button>
         </div>
         
         <div class="social-buttons">
@@ -113,55 +136,5 @@
         <p id="popupText"></p>
         <button onclick="closePopup()">Close</button>
     </div>
-
-    <script>
-        function toggleDarkMode() {
-            document.body.classList.toggle("dark-mode");
-            document.getElementById("messagePopup").classList.toggle("dark");
-            localStorage.setItem("darkMode", document.body.classList.contains("dark-mode") ? "enabled" : "disabled");
-        }
-
-        function addMessage(premium = false) {
-            const userMessage = document.getElementById("userMessage").value;
-            const userImage = document.getElementById("userImage").files[0];
-            
-            if (userMessage.trim() || userImage) {
-                const div = document.createElement("div");
-                div.classList.add("grid-item");
-                if (premium) div.classList.add("premium");
-                
-                if (userMessage.trim()) {
-                    const text = document.createElement("p");
-                    text.innerText = userMessage;
-                    div.appendChild(text);
-                }
-                
-                if (userImage) {
-                    const img = document.createElement("img");
-                    img.src = URL.createObjectURL(userImage);
-                    img.style.maxWidth = "100%";
-                    img.style.borderRadius = "5px";
-                    img.loading = "lazy";
-                    div.appendChild(img);
-                }
-                
-                div.onclick = function () {
-                    openPopup(userMessage);
-                };
-                
-                document.getElementById("messageGrid").appendChild(div);
-                document.getElementById("userMessage").value = "";
-            }
-        }
-        
-        function openPopup(message) {
-            document.getElementById("popupText").innerText = message;
-            document.getElementById("messagePopup").style.display = "block";
-        }
-        
-        function closePopup() {
-            document.getElementById("messagePopup").style.display = "none";
-        }
-    </script>
 </body>
 </html>
