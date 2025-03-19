@@ -42,11 +42,16 @@
             transition: transform 0.3s, box-shadow 0.3s;
             cursor: pointer;
         }
+        .premium {
+            background-color: gold !important;
+            color: black !important;
+            font-weight: bold;
+        }
         .grid-item:hover {
             transform: scale(1.05);
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
         }
-        .signup {
+        .signup, .submission-form {
             margin-top: 30px;
         }
         input, button {
@@ -65,64 +70,8 @@
         button:hover {
             background-color: #e55b00;
         }
-        .countdown {
-            font-size: 24px;
+        .social-buttons {
             margin-top: 20px;
-            color: #ff6600;
-            font-weight: bold;
-        }
-        .dark-mode {
-            background: #121212;
-            color: #fff;
-        }
-        .dark-mode .grid-item {
-            background-color: #333;
-        }
-        .dark-mode header {
-            background-color: #222;
-        }
-        .dark-mode button {
-            background-color: #ff8800;
-        }
-        .dark-mode-toggle {
-            margin-top: 20px;
-            cursor: pointer;
-            padding: 10px 20px;
-            background: #ff6600;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        .message-modal {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: #fff;
-            color: #000;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-            z-index: 1000;
-        }
-        .dark-mode .message-modal {
-            background: #333;
-            color: #fff;
-        }
-        .message-modal button {
-            margin-top: 10px;
-        }
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 999;
         }
     </style>
 </head>
@@ -132,48 +81,50 @@
         <h2>Reserve Your Spot on the Wall</h2>
         <p>Be one of the first to leave your mark. Limited spots available!</p>
         
-        <div class="grid" id="messageGrid">
+        <div class="grid" id="messageGrid"></div>
+        
+        <div class="submission-form">
+            <input type="text" id="userMessage" placeholder="Enter your message" required>
+            <button onclick="addMessage()">Submit Message</button>
+            <button onclick="addPremiumMessage()">Reserve Premium Spot</button>
         </div>
         
-        <div class="countdown" id="countdown">Launching in: --</div>
-        
-        <div class="signup">
-            <input type="email" placeholder="Enter your email" required>
-            <button>Join the Waitlist</button>
+        <div class="social-buttons">
+            <button onclick="share()">Share Your Spot</button>
         </div>
-        <button class="dark-mode-toggle" onclick="toggleDarkMode()">Toggle Dark Mode</button>
-    </div>
-
-    <div class="overlay" id="overlay"></div>
-    <div class="message-modal" id="messageModal">
-        <p id="messageContent"></p>
-        <button onclick="closeModal()">Close</button>
     </div>
 
     <script>
-        const messages = ["Message 1", "Message 2", "Message 3", "Message 4", "Message 5"];
+        const messages = [];
         const messageGrid = document.getElementById("messageGrid");
 
-        messages.forEach(msg => {
-            const div = document.createElement("div");
-            div.classList.add("grid-item");
-            div.innerText = msg;
-            div.onclick = () => openModal(msg);
-            messageGrid.appendChild(div);
-        });
-
-        function openModal(message) {
-            document.getElementById("messageContent").innerText = message;
-            document.getElementById("messageModal").style.display = "block";
-            document.getElementById("overlay").style.display = "block";
-        }
-        function closeModal() {
-            document.getElementById("messageModal").style.display = "none";
-            document.getElementById("overlay").style.display = "none";
+        function addMessage() {
+            const userMessage = document.getElementById("userMessage").value;
+            if (userMessage.trim()) {
+                const div = document.createElement("div");
+                div.classList.add("grid-item");
+                div.innerText = userMessage;
+                messageGrid.appendChild(div);
+            }
         }
 
-        function toggleDarkMode() {
-            document.body.classList.toggle("dark-mode");
+        function addPremiumMessage() {
+            const userMessage = document.getElementById("userMessage").value;
+            if (userMessage.trim()) {
+                const div = document.createElement("div");
+                div.classList.add("grid-item", "premium");
+                div.innerText = userMessage;
+                messageGrid.appendChild(div);
+            }
+        }
+
+        function share() {
+            const shareData = {
+                title: 'MyForeverWall',
+                text: 'Check out my message on MyForeverWall!',
+                url: window.location.href
+            };
+            navigator.share(shareData).catch(err => console.log('Share failed', err));
         }
     </script>
 </body>
