@@ -9,18 +9,19 @@
         body {
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(to right, #ffffff, #f9f9f9);
-            color: white;
+            color: black;
             text-align: center;
             margin: 0;
             padding: 0;
             transition: background 0.5s, color 0.5s;
         }
         header {
-            background-color: royalblue;
+            background: linear-gradient(45deg, #ffd700, #ffcc33, #e6ac00);
             padding: 20px;
             color: white;
             font-size: 24px;
             font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
         .container {
             max-width: 800px;
@@ -34,7 +35,7 @@
             padding: 20px;
         }
         .grid-item {
-            background-color: royalblue;
+            background: linear-gradient(45deg, #ffd700, #ffcc33, #e6ac00);
             color: white;
             padding: 20px;
             border-radius: 10px;
@@ -44,11 +45,14 @@
             word-wrap: break-word;
             max-height: 150px;
             overflow: hidden;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
         .premium {
-            background-color: royalblue !important;
+            background: linear-gradient(45deg, #ffd700, #ffcc33, #e6ac00) !important;
             color: white !important;
             font-weight: bold;
+            border: 2px solid #e6ac00;
+            box-shadow: 0px 4px 10px rgba(255, 215, 0, 0.6);
         }
         .grid-item:hover {
             transform: scale(1.05);
@@ -62,20 +66,21 @@
             margin: 5px;
             font-size: 16px;
             border-radius: 5px;
-            border: 1px solid royalblue;
-            background-color: royalblue;
+            border: 1px solid #e6ac00;
+            background: linear-gradient(45deg, #ffd700, #ffcc33, #e6ac00);
             color: white;
             cursor: pointer;
             transition: background 0.3s;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
         button:hover {
-            background-color: #1e3a8a;
+            background: linear-gradient(45deg, #e6ac00, #ffcc33, #ffd700);
         }
         .social-buttons {
             margin-top: 20px;
         }
         .dark-mode {
-            background: royalblue;
+            background: black;
             color: white;
         }
         .message-popup {
@@ -94,7 +99,7 @@
             color: black;
         }
         .message-popup.dark {
-            background: royalblue;
+            background: black;
             color: white;
         }
     </style>
@@ -161,21 +166,6 @@
                 
                 document.getElementById("messageGrid").appendChild(div);
             }
-        }
-
-        function toggleDarkMode() {
-            document.body.classList.toggle("dark-mode");
-            document.getElementById("messagePopup").classList.toggle("dark");
-            localStorage.setItem("darkMode", document.body.classList.contains("dark-mode") ? "enabled" : "disabled");
-        }
-
-        function openPopup(message) {
-            document.getElementById("popupText").innerText = message;
-            document.getElementById("messagePopup").style.display = "block";
-        }
-
-        function closePopup() {
-            document.getElementById("messagePopup").style.display = "none";
         }
     </script>
 </body>
