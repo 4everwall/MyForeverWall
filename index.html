@@ -40,6 +40,7 @@
             border-radius: 10px;
             font-size: 14px;
             transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
         }
         .grid-item:hover {
             transform: scale(1.05);
@@ -93,6 +94,31 @@
             border-radius: 5px;
             font-size: 16px;
         }
+        .message-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
+        .message-modal button {
+            margin-top: 10px;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
     </style>
 </head>
 <body>
@@ -101,12 +127,7 @@
         <h2>Reserve Your Spot on the Wall</h2>
         <p>Be one of the first to leave your mark. Limited spots available!</p>
         
-        <div class="grid">
-            <div class="grid-item">Message 1</div>
-            <div class="grid-item">Message 2</div>
-            <div class="grid-item">Message 3</div>
-            <div class="grid-item">Message 4</div>
-            <div class="grid-item">Message 5</div>
+        <div class="grid" id="messageGrid">
         </div>
         
         <div class="countdown" id="countdown">Launching in: --</div>
@@ -118,7 +139,34 @@
         <button class="dark-mode-toggle" onclick="toggleDarkMode()">Toggle Dark Mode</button>
     </div>
 
+    <div class="overlay" id="overlay"></div>
+    <div class="message-modal" id="messageModal">
+        <p id="messageContent"></p>
+        <button onclick="closeModal()">Close</button>
+    </div>
+
     <script>
+        const messages = ["Message 1", "Message 2", "Message 3", "Message 4", "Message 5"];
+        const messageGrid = document.getElementById("messageGrid");
+
+        messages.forEach(msg => {
+            const div = document.createElement("div");
+            div.classList.add("grid-item");
+            div.innerText = msg;
+            div.onclick = () => openModal(msg);
+            messageGrid.appendChild(div);
+        });
+
+        function openModal(message) {
+            document.getElementById("messageContent").innerText = message;
+            document.getElementById("messageModal").style.display = "block";
+            document.getElementById("overlay").style.display = "block";
+        }
+        function closeModal() {
+            document.getElementById("messageModal").style.display = "none";
+            document.getElementById("overlay").style.display = "none";
+        }
+
         function updateCountdown() {
             const launchDate = new Date("2025-04-15T00:00:00").getTime();
             const now = new Date().getTime();
