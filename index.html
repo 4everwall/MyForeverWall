@@ -48,40 +48,25 @@
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
         .premium {
-            background: linear-gradient(45deg, #d4af37, #c89b30, #b8860b) !important;
+            background: linear-gradient(45deg, #ffd700, #ffcc00, #ffb700) !important;
             color: white !important;
             font-weight: bold;
             border: 2px solid #b8860b;
-            box-shadow: 0px 4px 10px rgba(212, 175, 55, 0.6);
+            box-shadow: 0px 4px 10px rgba(255, 215, 0, 0.6);
         }
         .grid-item:hover {
             transform: scale(1.05);
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
         }
-        .signup, .submission-form {
-            margin-top: 30px;
-        }
-        input, button {
-            padding: 10px;
-            margin: 5px;
-            font-size: 16px;
-            border-radius: 5px;
-            border: 1px solid #b8860b;
-            background: linear-gradient(45deg, #d4af37, #c89b30, #b8860b);
-            color: white;
-            cursor: pointer;
-            transition: background 0.3s;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-        }
-        button:hover {
-            background: linear-gradient(45deg, #b8860b, #c89b30, #d4af37);
-        }
-        .social-buttons {
-            margin-top: 20px;
-        }
         .dark-mode {
-            background: black;
+            background: #121212;
             color: white;
+        }
+        .dark-mode .grid-item {
+            background: linear-gradient(45deg, #b8860b, #8b7500, #705e00);
+        }
+        .dark-mode .premium {
+            background: linear-gradient(45deg, #ffcc00, #ffb700, #e6a700) !important;
         }
         .message-popup {
             display: none;
@@ -99,7 +84,7 @@
             color: black;
         }
         .message-popup.dark {
-            background: black;
+            background: #222;
             color: white;
         }
     </style>
@@ -116,8 +101,8 @@
         <div class="submission-form">
             <input type="text" id="userMessage" placeholder="Enter your message (max 200 chars)" maxlength="200" required>
             <input type="file" id="userImage" accept="image/*">
-            <button onclick="addMessage()">Submit Message</button>
-            <button onclick="addPremiumMessage()">Reserve Premium Spot</button>
+            <button onclick="addMessage(false)">Submit Message</button>
+            <button onclick="addMessage(true)">Reserve Premium Spot</button>
         </div>
         
         <div class="social-buttons">
@@ -130,11 +115,11 @@
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            if (localStorage.getItem("darkMode") === "enabled") {
-                toggleDarkMode();
-            }
-        });
+        function toggleDarkMode() {
+            document.body.classList.toggle("dark-mode");
+            document.getElementById("messagePopup").classList.toggle("dark");
+            localStorage.setItem("darkMode", document.body.classList.contains("dark-mode") ? "enabled" : "disabled");
+        }
 
         function addMessage(premium = false) {
             const userMessage = document.getElementById("userMessage").value;
@@ -165,7 +150,17 @@
                 };
                 
                 document.getElementById("messageGrid").appendChild(div);
+                document.getElementById("userMessage").value = "";
             }
+        }
+        
+        function openPopup(message) {
+            document.getElementById("popupText").innerText = message;
+            document.getElementById("messagePopup").style.display = "block";
+        }
+        
+        function closePopup() {
+            document.getElementById("messagePopup").style.display = "none";
         }
     </script>
 </body>
