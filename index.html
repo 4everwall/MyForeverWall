@@ -3,101 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MyForeverWall - Leave Your Mark</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>My Forever Wall</title>
     <style>
         body {
-            font-family: 'Poppins', sans-serif;
-            background: white;
-            color: black;
+            background-color: #092442;
+            color: white;
+            font-family: Arial, sans-serif;
             text-align: center;
             margin: 0;
             padding: 0;
-            transition: background 0.5s, color 0.5s;
-        }
-        header {
-            background: black;
-            padding: 20px;
-            color: white;
-            font-size: 24px;
-            font-weight: 600;
         }
         .container {
             max-width: 900px;
-            margin: 30px auto;
+            margin: auto;
             padding: 20px;
+        }
+        h1 {
+            font-size: 36px;
+            color: #ffc500;
         }
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .brick {
+            background-color: #0d315c;
+            border: 2px solid #ffc500;
             padding: 20px;
+            text-align: center;
+            border-radius: 5px;
         }
-        .grid-item {
-            background: #f0f0f0;
-            padding: 15px;
-            border-radius: 10px;
-            transition: transform 0.3s, box-shadow 0.3s;
-            cursor: pointer;
+        .cta {
+            margin-top: 20px;
         }
-        .premium {
-            background: linear-gradient(45deg, gold, goldenrod);
-            color: white;
-            font-weight: bold;
-            border: 2px solid #b8860b;
-        }
-        .dark-mode {
-            background: #121212;
-            color: white;
-        }
-        .dark-mode .grid-item {
-            background: #333;
-        }
-        .dark-mode .premium {
-            background: linear-gradient(45deg, #ffcc00, #ffb700);
-        }
-        .message-popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
-        }
-        .dark-mode .message-popup {
-            background: #222;
-            color: white;
-        }
-        button {
-            background: black;
+        .cta button {
+            background-color: #ffc500;
+            color: #092442;
+            font-size: 18px;
+            padding: 10px 20px;
             border: none;
-            padding: 12px 20px;
-            color: white;
-            border-radius: 8px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            border-radius: 5px;
         }
-        .premium-button {
-            background: gold;
-            font-weight: bold;
-            border: 2px solid #b8860b;
+        .cta button:hover {
+            background-color: #e0a800;
         }
     </style>
 </head>
 <body>
-    <header>MyForeverWall - Leave Your Mark</header>
-    <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
     <div class="container">
-        <h2>Reserve Your Spot</h2>
-        <div class="grid" id="messageGrid"></div>
-        <div>
-            <input type="text" id="userMessage" placeholder="Enter your message" maxlength="200">
-            <button onclick="addMessage(false)">Submit</button>
-            <button class="premium-button" onclick="addMessage(true)">Premium Spot</button>
+        <h1>My Forever Wall</h1>
+        <p>Leave Your Mark, For Eternity.</p>
+        
+        <div class="cta">
+            <button>Join the Wall</button>
+        </div>
+        
+        <div class="grid">
+            <div class="brick">Brick 1</div>
+            <div class="brick">Brick 2</div>
+            <div class="brick">Brick 3</div>
+            <div class="brick">Brick 4</div>
+            <div class="brick">Brick 5</div>
+            <div class="brick">Brick 6</div>
+            <div class="brick">Brick 7</div>
+            <div class="brick">Brick 8</div>
         </div>
     </div>
 </body>
