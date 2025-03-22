@@ -24,14 +24,14 @@
         }
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             gap: 5px;
             margin-top: 20px;
         }
         .brick {
             background-color: #0d315c;
             border: 2px solid #ffc500;
-            padding: 20px 40px;
+            padding: 20px 50px;
             text-align: center;
             border-radius: 5px;
         }
@@ -39,8 +39,19 @@
             .grid {
                 grid-template-columns: repeat(4, 1fr);
             }
+            .grid .brick {
+                padding: 20px 60px;
+            }
             .grid .brick:nth-child(odd) {
-                margin-left: 25px;
+                margin-left: 15px;
+            }
+        }
+        @media (max-width: 599px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .grid .brick {
+                padding: 20px 40px;
             }
         }
         .cta {
