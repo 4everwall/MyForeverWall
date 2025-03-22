@@ -34,59 +34,41 @@
             padding: 20px 50px;
             text-align: center;
             border-radius: 5px;
-        }
-        @media (min-width: 600px) {
-            .grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
-            .grid .brick {
-                padding: 20px 60px;
-            }
-            .grid .brick:nth-child(odd) {
-                margin-left: 15px;
-            }
-        }
-        @media (max-width: 599px) {
-            .grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .grid .brick {
-                padding: 20px 40px;
-            }
-        }
-        .cta {
-            margin-top: 20px;
-        }
-        .cta button {
-            background-color: #ffc500;
-            color: #092442;
-            font-size: 18px;
-            padding: 10px 20px;
-            border: none;
             cursor: pointer;
-            border-radius: 5px;
-            transition: background 0.3s;
         }
-        .cta button:hover {
-            background-color: #e0a800;
+        .premium {
+            background-color: #ffc500 !important;
+            color: #092442;
         }
-        .signup {
-            margin-top: 20px;
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #092442;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            width: 300px;
         }
-        .signup input {
+        .modal input, .modal textarea, .modal select {
+            width: 90%;
             padding: 10px;
-            width: 250px;
-            border: none;
+            margin: 10px 0;
             border-radius: 5px;
-            margin-right: 10px;
+            border: none;
         }
-        .signup button {
+        .modal button {
             background-color: #ffc500;
             color: #092442;
             padding: 10px 15px;
             border: none;
             cursor: pointer;
             border-radius: 5px;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -96,46 +78,73 @@
         <p>Leave Your Mark, For Eternity.</p>
         
         <div class="cta">
-            <button onclick="addToWall()">Join the Wall</button>
+            <button onclick="openPurchasePopup()">Purchase a Brick</button>
         </div>
         
-        <div class="grid" id="wall">
-            <div class="brick">Brick 1</div>
-            <div class="brick">Brick 2</div>
-            <div class="brick">Brick 3</div>
-            <div class="brick">Brick 4</div>
-            <div class="brick">Brick 5</div>
-            <div class="brick">Brick 6</div>
-            <div class="brick">Brick 7</div>
-            <div class="brick">Brick 8</div>
-            <div class="brick">Brick 9</div>
-            <div class="brick">Brick 10</div>
-            <div class="brick">Brick 11</div>
-            <div class="brick">Brick 12</div>
-        </div>
-        
-        <div class="signup">
-            <p>Get notified when we launch:</p>
-            <input type="email" placeholder="Enter your email">
-            <button>Sign Up</button>
-        </div>
+        <div class="grid" id="wall"></div>
+    </div>
+
+    <div class="modal" id="purchaseModal">
+        <p>Choose your brick type:</p>
+        <button onclick="purchaseBrick('basic')">Basic Brick ($5)</button>
+        <button onclick="purchaseBrick('premium')">Premium Brick ($15)</button>
+        <button onclick="closePurchasePopup()">Cancel</button>
+    </div>
+
+    <div class="modal" id="brickModal">
+        <p id="brickContent"></p>
+        <select id="privacySetting">
+            <option value="public">Public</option>
+            <option value="private">Private</option>
+        </select>
+        <button onclick="savePrivacySetting()">Save</button>
+        <button onclick="closeBrickPopup()">Close</button>
     </div>
 
     <script>
-        function addToWall() {
-            let name = prompt("Enter your name to join the wall:");
-            if (name) {
-                let bricks = document.querySelectorAll(".brick");
-                for (let brick of bricks) {
-                    if (brick.textContent.includes("Brick")) {
-                        brick.textContent = name;
-                        brick.style.backgroundColor = "#ffc500";
-                        brick.style.color = "#092442";
-                        return;
+        const wall = document.getElementById("wall");
+
+        for (let i = 0; i < 100; i++) {
+            let brick = document.createElement("div");
+            brick.className = "brick";
+            brick.textContent = "Brick " + (i + 1);
+            brick.onclick = () => expandBrick(brick);
+            wall.appendChild(brick);
+        }
+
+        function openPurchasePopup() {
+            document.getElementById("purchaseModal").style.display = "block";
+        }
+        function closePurchasePopup() {
+            document.getElementById("purchaseModal").style.display = "none";
+        }
+
+        function purchaseBrick(type) {
+            let bricks = document.querySelectorAll(".brick");
+            for (let brick of bricks) {
+                if (brick.textContent.includes("Brick")) {
+                    brick.textContent = "User Name";
+                    if (type === "premium") {
+                        brick.classList.add("premium");
                     }
+                    closePurchasePopup();
+                    return;
                 }
-                alert("No more bricks available!");
             }
+            alert("No more bricks available!");
+        }
+
+        function expandBrick(brick) {
+            document.getElementById("brickContent").textContent = "Full content of " + brick.textContent;
+            document.getElementById("brickModal").style.display = "block";
+        }
+        function closeBrickPopup() {
+            document.getElementById("brickModal").style.display = "none";
+        }
+
+        function savePrivacySetting() {
+            let setting = document.getElementById("privacySetting").value;
+            alert("Privacy setting saved as: " + setting);
         }
     </script>
 </body>
