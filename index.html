@@ -8,35 +8,53 @@
         body {
             background-color: #092442;
             color: white;
-            font-family: Arial, sans-serif;
+            font-family: 'Poppins', sans-serif;
             text-align: center;
             margin: 0;
             padding: 0;
         }
         .container {
-            max-width: 900px;
+            max-width: 1000px;
             margin: auto;
             padding: 20px;
         }
         h1 {
-            font-size: 36px;
+            font-size: 42px;
             color: #ffc500;
+            text-transform: uppercase;
         }
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 5px;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 8px;
             margin-top: 20px;
+            padding: 10px;
         }
         .brick {
             background-color: #0d315c;
             border: 2px solid #ffc500;
             padding: 15px;
             text-align: center;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
             position: relative;
-            word-wrap: break-word;
+            overflow: hidden;
+            white-space: nowrap;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .brick:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(255, 197, 0, 0.7);
+        }
+        .brick span {
+            display: inline-block;
+            position: relative;
+            animation: scrollText 5s linear infinite;
+            font-weight: bold;
+        }
+        @keyframes scrollText {
+            from { transform: translateX(100%); }
+            to { transform: translateX(-100%); }
         }
         .premium {
             background-color: #ffc500 !important;
@@ -52,10 +70,10 @@
             color: white;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 15px rgba(255, 197, 0, 0.8);
             text-align: center;
             width: 90%;
-            max-width: 300px;
+            max-width: 400px;
         }
         .modal input, .modal textarea, .modal select {
             width: 100%;
@@ -63,15 +81,20 @@
             margin: 10px 0;
             border-radius: 5px;
             border: none;
+            font-size: 16px;
         }
         .modal button {
             background-color: #ffc500;
             color: #092442;
-            padding: 10px 15px;
+            padding: 12px 20px;
             border: none;
             cursor: pointer;
             border-radius: 5px;
             margin-top: 10px;
+            font-weight: bold;
+        }
+        .modal button:hover {
+            background-color: #e6b800;
         }
     </style>
 </head>
@@ -112,7 +135,9 @@
             let brick = document.createElement("div");
             brick.className = "brick";
             brick.dataset.index = i;
-            brick.textContent = "Brick " + (i + 1);
+            let span = document.createElement("span");
+            span.textContent = "Brick " + (i + 1);
+            brick.appendChild(span);
             brick.onclick = () => expandBrick(brick);
             wall.appendChild(brick);
         }
@@ -130,7 +155,7 @@
                 if (!purchasedBricks[brick.dataset.index]) {
                     let userName = prompt("Enter your name:");
                     if (!userName) return;
-                    brick.textContent = userName;
+                    brick.querySelector("span").textContent = userName;
                     purchasedBricks[brick.dataset.index] = { type, content: "", privacy: "public" };
                     if (type === "premium") {
                         brick.classList.add("premium");
@@ -159,17 +184,6 @@
 
         function closeBrickPopup() {
             document.getElementById("brickModal").style.display = "none";
-        }
-
-        function saveBrickContent() {
-            let index = document.getElementById("brickModal").dataset.index;
-            if (!purchasedBricks[index]) return;
-            purchasedBricks[index].content = document.getElementById("brickContent").value;
-            if (purchasedBricks[index].type === "premium") {
-                purchasedBricks[index].privacy = document.getElementById("privacySetting").value;
-            }
-            alert("Brick content saved!");
-            closeBrickPopup();
         }
     </script>
 </body>
