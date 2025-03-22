@@ -24,17 +24,19 @@
         }
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
             gap: 5px;
             margin-top: 20px;
         }
         .brick {
             background-color: #0d315c;
             border: 2px solid #ffc500;
-            padding: 20px 50px;
+            padding: 15px;
             text-align: center;
             border-radius: 5px;
             cursor: pointer;
+            position: relative;
+            word-wrap: break-word;
         }
         .premium {
             background-color: #ffc500 !important;
@@ -52,10 +54,11 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
             text-align: center;
-            width: 300px;
+            width: 90%;
+            max-width: 300px;
         }
         .modal input, .modal textarea, .modal select {
-            width: 90%;
+            width: 100%;
             padding: 10px;
             margin: 10px 0;
             border-radius: 5px;
@@ -92,21 +95,23 @@
     </div>
 
     <div class="modal" id="brickModal">
-        <p id="brickContent"></p>
-        <select id="privacySetting">
+        <textarea id="brickContent"></textarea>
+        <select id="privacySetting" style="display: none;">
             <option value="public">Public</option>
             <option value="private">Private</option>
         </select>
-        <button onclick="savePrivacySetting()">Save</button>
+        <button onclick="saveBrickContent()">Save</button>
         <button onclick="closeBrickPopup()">Close</button>
     </div>
 
     <script>
         const wall = document.getElementById("wall");
+        let purchasedBricks = {};
 
         for (let i = 0; i < 100; i++) {
             let brick = document.createElement("div");
             brick.className = "brick";
+            brick.dataset.index = i;
             brick.textContent = "Brick " + (i + 1);
             brick.onclick = () => expandBrick(brick);
             wall.appendChild(brick);
@@ -122,8 +127,11 @@
         function purchaseBrick(type) {
             let bricks = document.querySelectorAll(".brick");
             for (let brick of bricks) {
-                if (brick.textContent.includes("Brick")) {
-                    brick.textContent = "User Name";
+                if (!purchasedBricks[brick.dataset.index]) {
+                    let userName = prompt("Enter your name:");
+                    if (!userName) return;
+                    brick.textContent = userName;
+                    purchasedBricks[brick.dataset.index] = { type, content: "", privacy: "public" };
                     if (type === "premium") {
                         brick.classList.add("premium");
                     }
@@ -135,16 +143,33 @@
         }
 
         function expandBrick(brick) {
-            document.getElementById("brickContent").textContent = "Full content of " + brick.textContent;
+            let index = brick.dataset.index;
+            if (!purchasedBricks[index]) return;
+
+            document.getElementById("brickContent").value = purchasedBricks[index].content;
+            if (purchasedBricks[index].type === "premium") {
+                document.getElementById("privacySetting").style.display = "block";
+                document.getElementById("privacySetting").value = purchasedBricks[index].privacy;
+            } else {
+                document.getElementById("privacySetting").style.display = "none";
+            }
+            document.getElementById("brickModal").dataset.index = index;
             document.getElementById("brickModal").style.display = "block";
         }
+
         function closeBrickPopup() {
             document.getElementById("brickModal").style.display = "none";
         }
 
-        function savePrivacySetting() {
-            let setting = document.getElementById("privacySetting").value;
-            alert("Privacy setting saved as: " + setting);
+        function saveBrickContent() {
+            let index = document.getElementById("brickModal").dataset.index;
+            if (!purchasedBricks[index]) return;
+            purchasedBricks[index].content = document.getElementById("brickContent").value;
+            if (purchasedBricks[index].type === "premium") {
+                purchasedBricks[index].privacy = document.getElementById("privacySetting").value;
+            }
+            alert("Brick content saved!");
+            closeBrickPopup();
         }
     </script>
 </body>
