@@ -96,10 +96,10 @@
         <p>Leave Your Mark, For Eternity.</p>
         
         <div class="cta">
-            <button>Join the Wall</button>
+            <button onclick="addToWall()">Join the Wall</button>
         </div>
         
-        <div class="grid">
+        <div class="grid" id="wall">
             <div class="brick">Brick 1</div>
             <div class="brick">Brick 2</div>
             <div class="brick">Brick 3</div>
@@ -120,5 +120,23 @@
             <button>Sign Up</button>
         </div>
     </div>
+
+    <script>
+        function addToWall() {
+            let name = prompt("Enter your name to join the wall:");
+            if (name) {
+                let bricks = document.querySelectorAll(".brick");
+                for (let brick of bricks) {
+                    if (brick.textContent.includes("Brick")) {
+                        brick.textContent = name;
+                        brick.style.backgroundColor = "#ffc500";
+                        brick.style.color = "#092442";
+                        return;
+                    }
+                }
+                alert("No more bricks available!");
+            }
+        }
+    </script>
 </body>
 </html>
