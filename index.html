@@ -25,22 +25,18 @@
         .grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
+            gap: 5px;
             margin-top: 20px;
         }
         .brick {
             background-color: #0d315c;
             border: 2px solid #ffc500;
-            padding: 20px;
+            padding: 20px 40px;
             text-align: center;
             border-radius: 5px;
         }
-        .row {
-            display: flex;
-            justify-content: center;
-        }
-        .row:nth-child(even) {
-            margin-left: 25px; /* Offset effect for bricks */
+        .grid .brick:nth-child(odd) {
+            margin-left: 25px;
         }
         .cta {
             margin-top: 20px;
@@ -88,23 +84,18 @@
         </div>
         
         <div class="grid">
-            <div class="row">
-                <div class="brick">Brick 1</div>
-                <div class="brick">Brick 2</div>
-                <div class="brick">Brick 3</div>
-                <div class="brick">Brick 4</div>
-            </div>
-            <div class="row">
-                <div class="brick">Brick 5</div>
-                <div class="brick">Brick 6</div>
-                <div class="brick">Brick 7</div>
-            </div>
-            <div class="row">
-                <div class="brick">Brick 8</div>
-                <div class="brick">Brick 9</div>
-                <div class="brick">Brick 10</div>
-                <div class="brick">Brick 11</div>
-            </div>
+            <div class="brick">Brick 1</div>
+            <div class="brick">Brick 2</div>
+            <div class="brick">Brick 3</div>
+            <div class="brick">Brick 4</div>
+            <div class="brick">Brick 5</div>
+            <div class="brick">Brick 6</div>
+            <div class="brick">Brick 7</div>
+            <div class="brick">Brick 8</div>
+            <div class="brick">Brick 9</div>
+            <div class="brick">Brick 10</div>
+            <div class="brick">Brick 11</div>
+            <div class="brick">Brick 12</div>
         </div>
         
         <div class="signup">
