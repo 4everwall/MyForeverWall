@@ -24,7 +24,7 @@
         }
         .grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
             gap: 5px;
             margin-top: 20px;
         }
@@ -35,8 +35,13 @@
             text-align: center;
             border-radius: 5px;
         }
-        .grid .brick:nth-child(odd) {
-            margin-left: 25px;
+        @media (min-width: 600px) {
+            .grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            .grid .brick:nth-child(odd) {
+                margin-left: 25px;
+            }
         }
         .cta {
             margin-top: 20px;
