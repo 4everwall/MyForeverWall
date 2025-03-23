@@ -49,23 +49,31 @@
             background: rgba(0, 0, 0, 0.5);
             z-index: 500;
         }
-        .brick-popup .close-btn, .brick-popup .close-x {
-            position: absolute;
-            top: 10px;
-            right: 10px;
+        .brick-popup .close-btn {
             background-color: #e6b800;
             color: #092442;
             border: none;
-            padding: 5px 10px;
+            padding: 10px 20px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 16px;
             border-radius: 5px;
+            margin-top: 20px;
         }
         .brick-popup .close-x {
-            top: 5px;
-            right: 5px;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #092442;
+            color: #ffc500;
+            border: none;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
             font-size: 18px;
-            padding: 0 5px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .modal h2, .brick-popup h2 {
             margin-bottom: 15px;
@@ -190,6 +198,37 @@
             display: block;
             margin: 10px auto;
         }
+        .brick-popup img {
+            max-width: 100%;
+            max-height: 100%;
+            display: block;
+            margin: 10px auto;
+        }
+        .progress-bar {
+            width: 80%;
+            margin: 10px auto;
+            background-color: #092442;
+            border-radius: 10px;
+            overflow: hidden;
+            display: none;
+            position: relative;
+            height: 20px;
+        }
+        .progress-bar-inner {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            background-color: #092442;
+            transition: width 0.3s;
+            overflow: hidden;
+        }
+        .brick-piece {
+            width: 20px;
+            height: 18px;
+            background-color: #ffc500;
+            margin-right: 2px;
+            border-radius: 3px;
+        }
         @media (max-width: 600px) {
             h1 {
                 font-size: 32px;
@@ -209,12 +248,19 @@
                 transform: scale(1.2);
                 box-shadow: 0 0 15px rgba(255, 197, 0, 1);
             }
+            .modal, .brick-popup {
+                width: 80%;
+                max-width: 300px;
+            }
             .modal textarea, .brick-popup textarea {
                 height: 150px;
             }
         }
     </style>
     <script>
+        let lastTappedBrick = null;
+        let tapTimeout = null;
+
         function openPurchasePopup() {
             document.getElementById("purchaseModal").style.display = "block";
             document.getElementById("popupOverlay").style.display = "block";
@@ -304,12 +350,17 @@
         }
 
         function handleBrickClick(event, brick) {
-            if (brick.classList.contains("expanded-tap")) {
+            event.preventDefault();
+            if (lastTappedBrick === brick) {
+                clearTimeout(tapTimeout);
                 openBrickPopup(brick);
+                lastTappedBrick = null;
             } else {
+                lastTappedBrick = brick;
                 brick.classList.add("expanded-tap");
-                setTimeout(() => {
+                tapTimeout = setTimeout(() => {
                     brick.classList.remove("expanded-tap");
+                    lastTappedBrick = null;
                 }, 3000); // Remove the expanded-tap class after 3 seconds
             }
         }
@@ -348,6 +399,32 @@
             }
             document.getElementById("popupOverlay").style.display = "none";
         }
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const progressBar = document.querySelector('.progress-bar');
+                const progressBarInner = document.querySelector('.progress-bar-inner');
+                progressBar.style.display = 'block';
+
+                let progress = 0;
+                const uploadSimulation = setInterval(() => {
+                    progress += 10;
+                    const brickPiece = document.createElement('div');
+                    brickPiece.className = 'brick-piece';
+                    progressBarInner.appendChild(brickPiece);
+                    if (progress >= 100) {
+                        clearInterval(uploadSimulation);
+                        setTimeout(() => {
+                            progressBar.style.display = 'none';
+                            progressBarInner.innerHTML = '';
+                        }, 1000);
+                    }
+                }, 300);
+            }
+        }
+
+        document.getElementById('brickImage').addEventListener('change', handleFileUpload);
     </script>
 </head>
 <body onload="updatePurchaseOptions()">
@@ -369,6 +446,9 @@
         <div class="file-upload-wrapper">
             <label for="brickImage">Upload Image</label>
             <input type="file" id="brickImage" accept="image/*">
+        </div>
+        <div class="progress-bar">
+            <div class="progress-bar-inner"></div>
         </div>
         <button class="purchase-button" onclick="addBrick()">Confirm Purchase</button>
         <button onclick="closePurchasePopup()">Close</button>
