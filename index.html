@@ -23,43 +23,6 @@
             color: #ffc500;
             text-transform: uppercase;
         }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 8px;
-            margin-top: 20px;
-            padding: 10px;
-        }
-        .brick {
-            background-color: #0d315c;
-            border: 2px solid #ffc500;
-            padding: 15px;
-            text-align: center;
-            border-radius: 8px;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            white-space: nowrap;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .brick:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 10px rgba(255, 197, 0, 0.7);
-        }
-        .brick span {
-            display: inline-block;
-            position: relative;
-            animation: scrollText 5s linear infinite;
-            font-weight: bold;
-        }
-        @keyframes scrollText {
-            from { transform: translateX(100%); }
-            to { transform: translateX(-100%); }
-        }
-        .premium {
-            background-color: #ffc500 !important;
-            color: #092442;
-        }
         .modal {
             display: none;
             position: fixed;
@@ -72,119 +35,142 @@
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(255, 197, 0, 0.8);
             text-align: center;
-            width: 90%;
-            max-width: 400px;
+            width: 72%;
+            max-width: 320px;
         }
-        .modal input, .modal textarea, .modal select {
-            width: 100%;
-            padding: 10px;
+        .modal h2 {
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+        .modal input, .modal textarea, .modal select, .modal button, .file-upload-wrapper {
+            width: 80%;
+            padding: 12px;
             margin: 10px 0;
-            border-radius: 5px;
+            border-radius: 8px;
             border: none;
             font-size: 16px;
+            font-weight: bold;
+            display: block;
+            text-align: center;
+            box-sizing: border-box;
+            margin-left: auto;
+            margin-right: auto;
         }
-        .modal button {
+        .modal textarea {
+            resize: none;
+            height: 221px;
+        }
+        .modal button, .file-upload-wrapper label {
             background-color: #ffc500;
             color: #092442;
-            padding: 12px 20px;
-            border: none;
+            padding: 12px;
             cursor: pointer;
-            border-radius: 5px;
-            margin-top: 10px;
+            transition: background 0.3s, box-shadow 0.3s;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 2px solid #e6b800;
             font-weight: bold;
+            text-align: center;
+            width: 80%;
         }
-        .modal button:hover {
+        .modal button:hover, .file-upload-wrapper label:hover {
             background-color: #e6b800;
+            box-shadow: 0 0 10px rgba(255, 197, 0, 0.7);
+        }
+        .file-upload-wrapper {
+            display: none;
+        }
+        .file-upload-wrapper input[type="file"] {
+            display: none;
+        }
+        .purchase-button {
+            background-color: #ffc500;
+            color: #092442;
+            padding: 14px 28px;
+            font-size: 18px;
+            font-weight: bold;
+            border: 2px solid #e6b800;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s, box-shadow 0.3s;
+            box-shadow: 0 0 10px rgba(255, 197, 0, 0.7);
+        }
+        .purchase-button:hover {
+            background-color: #e6b800;
+            box-shadow: 0 0 15px rgba(255, 197, 0, 1);
+        }
+        .wall {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .brick {
+            width: 100px;
+            height: 50px;
+            margin: 5px;
+            text-align: center;
+            line-height: 50px;
+            font-weight: bold;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out;
+            overflow: hidden;
+        }
+        .basic-brick { background-color: #092442; }
+        .premium-brick { background-color: #ffc500; color: #092442; }
+        .brick:hover {
+            transform: scale(1.2);
+        }
+        .brick-content {
+            white-space: nowrap;
+            overflow: hidden;
+            display: inline-block;
+            animation: scrollText 5s linear infinite;
+        }
+        @keyframes scrollText {
+            from { transform: translateX(100%); }
+            to { transform: translateX(-100%); }
         }
     </style>
-</head>
-<body>
-    <div class="container">
-        <h1>My Forever Wall</h1>
-        <p>Leave Your Mark, For Eternity.</p>
-        
-        <div class="cta">
-            <button onclick="openPurchasePopup()">Purchase a Brick</button>
-        </div>
-        
-        <div class="grid" id="wall"></div>
-    </div>
-
-    <div class="modal" id="purchaseModal">
-        <p>Choose your brick type:</p>
-        <button onclick="purchaseBrick('basic')">Basic Brick ($5)</button>
-        <button onclick="purchaseBrick('premium')">Premium Brick ($15)</button>
-        <button onclick="closePurchasePopup()">Cancel</button>
-    </div>
-
-    <div class="modal" id="brickModal">
-        <textarea id="brickContent"></textarea>
-        <select id="privacySetting" style="display: none;">
-            <option value="public">Public</option>
-            <option value="private">Private</option>
-        </select>
-        <button onclick="saveBrickContent()">Save</button>
-        <button onclick="closeBrickPopup()">Close</button>
-    </div>
-
     <script>
-        const wall = document.getElementById("wall");
-        let purchasedBricks = {};
-
-        for (let i = 0; i < 100; i++) {
-            let brick = document.createElement("div");
-            brick.className = "brick";
-            brick.dataset.index = i;
-            let span = document.createElement("span");
-            span.textContent = "Brick " + (i + 1);
-            brick.appendChild(span);
-            brick.onclick = () => expandBrick(brick);
-            wall.appendChild(brick);
-        }
-
         function openPurchasePopup() {
             document.getElementById("purchaseModal").style.display = "block";
         }
         function closePurchasePopup() {
             document.getElementById("purchaseModal").style.display = "none";
         }
-
-        function purchaseBrick(type) {
-            let bricks = document.querySelectorAll(".brick");
-            for (let brick of bricks) {
-                if (!purchasedBricks[brick.dataset.index]) {
-                    let userName = prompt("Enter your name:");
-                    if (!userName) return;
-                    brick.querySelector("span").textContent = userName;
-                    purchasedBricks[brick.dataset.index] = { type, content: "", privacy: "public" };
-                    if (type === "premium") {
-                        brick.classList.add("premium");
-                    }
-                    closePurchasePopup();
-                    return;
-                }
-            }
-            alert("No more bricks available!");
-        }
-
-        function expandBrick(brick) {
-            let index = brick.dataset.index;
-            if (!purchasedBricks[index]) return;
-
-            document.getElementById("brickContent").value = purchasedBricks[index].content;
-            if (purchasedBricks[index].type === "premium") {
-                document.getElementById("privacySetting").style.display = "block";
-                document.getElementById("privacySetting").value = purchasedBricks[index].privacy;
-            } else {
-                document.getElementById("privacySetting").style.display = "none";
-            }
-            document.getElementById("brickModal").dataset.index = index;
-            document.getElementById("brickModal").style.display = "block";
-        }
-
-        function closeBrickPopup() {
-            document.getElementById("brickModal").style.display = "none";
+        function updatePurchaseOptions() {
+            let brickType = document.getElementById("brickType").value;
+            let fileUpload = document.querySelector(".file-upload-wrapper");
+            let isPremium = brickType === "Premium Brick";
+            if (fileUpload) fileUpload.style.display = isPremium ? "block" : "none";
         }
     </script>
+</head>
+<body onload="updatePurchaseOptions()">
+    <div class="container">
+        <h1>My Forever Wall</h1>
+        <p>Leave Your Mark, For Eternity.</p>
+        <button class="purchase-button" onclick="openPurchasePopup()">Purchase a Brick</button>
+        <div class="wall"></div>
+    </div>
+    <div class="modal" id="purchaseModal">
+        <h2>Purchase a Brick</h2>
+        <input type="text" id="brickName" placeholder="Name your brick">
+        <textarea id="brickMessage" placeholder="Your Message"></textarea>
+        <select id="brickType" onchange="updatePurchaseOptions()">
+            <option selected>Choose a Brick</option>
+            <option>Basic Brick</option>
+            <option>Premium Brick</option>
+        </select>
+        <div class="file-upload-wrapper">
+            <label for="brickImage">Upload Image</label>
+            <input type="file" id="brickImage" accept="image/*">
+        </div>
+        <button class="purchase-button" onclick="addBrick()">Confirm Purchase</button>
+        <button onclick="closePurchasePopup()">Close</button>
+    </div>
 </body>
 </html>
