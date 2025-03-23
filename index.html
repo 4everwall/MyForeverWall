@@ -35,7 +35,7 @@
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(255, 197, 0, 0.8);
             text-align: center;
-            width: 400px;
+            width: 90%;
             max-width: 400px;
             z-index: 1000;
         }
@@ -103,7 +103,7 @@
         .wall {
             display: flex;
             flex-wrap: wrap;
-            justify-content: left;
+            justify-content: center;
             margin-top: 20px;
         }
         .brick {
@@ -161,6 +161,27 @@
             max-height: 200px;
             display: block;
             margin: 10px auto;
+        }
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 32px;
+            }
+            .purchase-button {
+                width: 100%;
+            }
+            .brick {
+                width: 80px;
+                height: 40px;
+                margin: 3px;
+                line-height: 40px;
+            }
+            .brick:hover, .brick.expanded {
+                width: 100px;
+                height: 50px;
+            }
+            .modal textarea, .brick-popup textarea {
+                height: 150px;
+            }
         }
     </style>
     <script>
